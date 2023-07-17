@@ -4,6 +4,7 @@
 	"name": "C++",
 	"build": {
 		"dockerfile": "Dockerfile",
+		"context": "."
 		// Update 'VARIANT' to pick an Ubuntu OS version. Options: [bionic, focal]. Default: focal
 		// Update 'GCC_VER' to pick a gcc and g++ version. Options: [7, 8, 9, 10, 11]. Default: 11
 		// Update 'LLVM_VER' to pick clang version. Options: [10, 11, 12, 13]. Default: 13
@@ -19,23 +20,27 @@
 		"--security-opt",
 		"seccomp=unconfined"
 	],
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"cmake.configureOnOpen": true,
-		"editor.formatOnSave": true
+	"customizations": {
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-vscode.cmake-tools",
+				"twxs.cmake",
+				"ms-vscode.cpptools-themes",
+				"cschlosser.doxdocgen",
+				"eamodio.gitlens",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"mutantdino.resourcemonitor"
+			],
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"cmake.configureOnOpen": true,
+				"editor.formatOnSave": true
+			}
+		}
 	},
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"ms-vscode.cpptools",
-		"ms-vscode.cmake-tools",
-		"twxs.cmake",
-		"ms-vscode.cpptools-themes",
-		"cschlosser.doxdocgen",
-		"eamodio.gitlens",
-		"ms-python.python",
-		"ms-python.vscode-pylance",
-		"mutantdino.resourcemonitor"
-	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
@@ -47,6 +52,12 @@
 	"features": {
 		"git": "latest",
 		"git-lfs": "latest",
-		"powershell": "latest"
+		"powershell": "latest",
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"configureZshAsDefaultShell": true,
+			"username": "codebuster",
+			"userUid": "1000",
+			"userGid": "1000"
+		}
 	}
 }

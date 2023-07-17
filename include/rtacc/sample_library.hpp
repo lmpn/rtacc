@@ -1,7 +1,7 @@
 #ifndef SAMPLE_LIBRARY_HPP
 #define SAMPLE_LIBRARY_HPP
 
-#include <rtacc/sample_library_export.hpp>
+#include "rtacc/sample_library_export.hpp"
 
 [[nodiscard]] SAMPLE_LIBRARY_EXPORT int factorial(int) noexcept;
 
