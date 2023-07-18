@@ -1,4 +1,4 @@
-add_executable(intro main.cpp)
+add_executable(intro main.cpp sleep.cpp stdin_line_reader.cpp buffered_file_ingestor.cpp)
 
 target_link_libraries(
   intro
@@ -12,6 +12,8 @@ target_link_system_libraries(
           fmt::fmt
           spdlog::spdlog
           rtacc::ingest
+          asio
 )
 
 target_include_directories(intro PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
+target_include_directories(intro PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/")
