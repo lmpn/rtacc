@@ -9,26 +9,26 @@
 // This file will be generated automatically when cur_you run the CMake
 // configuration step. It creates a namespace called `rtacc`. You can modify
 // the source template at `configured_files/config.hpp.in`.
-#include <asio/io_context.hpp>
-#include <asio/posix/stream_descriptor.hpp>
-#include <asio/stream_file.hpp>
+#include "asio.hpp"
 #include <internal_use_only/config.hpp>
 #include <stdio.h>
-
+#include <memory>
 
 class file
 {
 private:
-  using file_impl = std::FILE *;
-  using file_impl_ptr = std::shared_ptr<file_impl>;
-  file_impl_ptr m_file;
+  using file_impl = std::FILE;
+  using file_impl_ptr = std::FILE*;
+  using file_impl_sptr = std::shared_ptr<file_impl>;
+  file_impl_sptr m_file;
   file(const file &) = delete;
   file &operator=(const file &) = delete;
 
-  static create_file_ptr(const std::string &path, const std::string &mode = std::string("r"))
+  static std::shared_ptr<file_impl> create_file_ptr(const std::string &path, const std::string &mode = std::string("r"))
   {
-    auto fp = std::fopen(path, mode);
-    return fp ? std::shared_ptr<std::FILE>(fp, std::fclose) : std::shared_ptr<std::FILE>();
+    file_impl_ptr fp = std::fopen(path.c_str(), mode.c_str());
+    
+    return std::shared_ptr<file_impl>(std::move(fp), std::fclose);
   }
 
 public:
@@ -36,12 +36,7 @@ public:
     : m_file(create_file_ptr(path, mode))
   {}
 
-  auto desc() const { return m_file->_file; }
-
-  ~file()
-  {
-    if (m_file) { std::fclose(m_file); }
-  }
+  auto desc() const { std::cout << m_file->_file<<"\n"; return fileno(m_file.get())  ; }
 };
 
 
@@ -63,15 +58,19 @@ int main(int argc, const char **argv)
       return EXIT_SUCCESS;
     }
 
+
     constexpr std::size_t size = 1024;
     asio::io_context ioc{ 1 };
     file fd_ = file(file_path->c_str(), "r");
-    auto fd_ptr = std::make_shared<FILE>() asio::posix::stream_descriptor stream_(ioc, fd_);
+    asio::posix::stream_descriptor stream_(ioc, fd_.desc());
     std::string buffer_;
     buffer_.resize(size);
 
-    fclose(fd_);
-
+    asio::async_read(stream_, asio::buffer(buffer_, size), [&buffer_](std::error_code ec, std::size_t length){
+      fmt::print("buffer: \n {}\n", buffer_);
+      fmt::print("ec: {} len: {}\n", ec.message(), length);
+    });
+    ioc.run();
   } catch (const std::exception &e) {
     spdlog::error("Unhandled exception in main: {}", e.what());
   }
