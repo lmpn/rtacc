@@ -1,4 +1,4 @@
-add_executable(intro main.cpp sleep.cpp stdin_line_reader.cpp buffered_file_ingestor.cpp)
+add_executable(intro main.cpp)
 
 target_link_libraries(
   intro
