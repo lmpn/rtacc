@@ -12,6 +12,7 @@ target_link_system_libraries(
           fmt::fmt
           spdlog::spdlog
           rtacc::ingest
+          rtacc::io
           asio
 )
 

@@ -1,8 +1,16 @@
 #include <catch2/catch_test_macros.hpp>
 
+int factorial(int input) noexcept
+{
+  int result = 1;
 
-#include <rtacc/sample_library.hpp>
+  while (input > 0) {
+    result *= input;
+    --input;
+  }
 
+  return result;
+}
 
 TEST_CASE("Factorials are computed", "[factorial]")
 {
