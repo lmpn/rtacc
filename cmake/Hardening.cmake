@@ -48,7 +48,7 @@ macro(
 
     check_cxx_compiler_flag(-fstack-clash-protection CLASH_PROTECTION)
     if(CLASH_PROTECTION)
-      if(LINUX OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+      if(LINUX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         set(NEW_COMPILE_OPTIONS "${NEW_COMPILE_OPTIONS} -fstack-clash-protection")
         message(STATUS "*** g++/clang -fstack-clash-protection enabled")
       else()

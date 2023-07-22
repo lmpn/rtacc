@@ -23,7 +23,10 @@ buffered_file_ingestor::buffered_file_ingestor(const asio::any_io_executor &ex,
 void buffered_file_ingestor::read_impl(ingestor::read_cb handler)
 {
   auto cb = [this, handler = std::move(handler)](std::error_code ec, std::size_t length) {
-    fmt::print("ec: {} len: {}\n", ec.message(), length);
+    if (ec.value() != 0) {
+      spdlog::error("Error({}): {} \n", ec.value(), ec.message());
+      return;
+    }
     auto payload = m_buffer.substr(0, length);
     m_buffer.erase(0, length);
     handler(payload);

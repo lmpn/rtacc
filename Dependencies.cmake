@@ -11,13 +11,6 @@ function(rtacc_setup_dependencies)
 
   find_package(Threads REQUIRED)
 
-  CPMAddPackage("gh:axboe/liburing#liburing-2.4@2.4")
-  if(NOT TARGET uring)
-    add_library(uring INTERFACE)
-    MESSAGE("here ${liburing_SOURCE_DIR}")
-    target_include_directories(uring SYSTEM INTERFACE ${liburing_SOURCE_DIR}/src/include)
-  endif()
-
   CPMAddPackage("gh:chriskohlhoff/asio#asio-1-28-0@1.28.0")
 
   # ASIO doesn't use CMake, we have to configure it manually. Extra notes for using on Windows:
@@ -75,7 +68,7 @@ function(rtacc_setup_dependencies)
       NAME
       spdlog
       VERSION
-      1.11.0
+      1.12.0
       GITHUB_REPOSITORY
       "gabime/spdlog"
       OPTIONS

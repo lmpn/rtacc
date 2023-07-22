@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/cpp
 {
 	"name": "C++",
-	//"image": "devenv:latest",
+	// "image": "pachedo/rtacc:dev-1",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "."
@@ -19,7 +19,9 @@
 	"runArgs": [
 		"--cap-add=SYS_PTRACE",
 		"--security-opt",
-		"seccomp=unconfined"
+		"seccomp=unconfined",
+		"--memory=6g",
+		"--cpus=4"
 	],
 	"customizations": {
 		"vscode": {
