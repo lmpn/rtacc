@@ -59,8 +59,8 @@
 		"ghcr.io/devcontainers/features/common-utils:2": {
 			"configureZshAsDefaultShell": true,
 			"username": "codebuster",
-			"userUid": "1000",
-			"userGid": "1000"
+			"userUid": "1001",
+			"userGid": "1001"
 		}
 	}
 }
