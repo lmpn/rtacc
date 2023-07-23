@@ -22,9 +22,9 @@ buffered_file_ingestor::buffered_file_ingestor(const asio::any_io_executor &ex,
 
 void buffered_file_ingestor::read_impl(ingestor::read_cb handler)
 {
-  auto cb = [this, handler = std::move(handler)](std::error_code ec, std::size_t length) {
-    if (ec.value() != 0) {
-      spdlog::error("Error({}): {} \n", ec.value(), ec.message());
+  auto read_handler = [this, handler = std::move(handler)](std::error_code code, std::size_t length) {
+    if (code.value() != 0) {
+      spdlog::error("Error({}): {} \n", code.value(), code.message());
       return;
     }
     auto payload = m_buffer.substr(0, length);
@@ -32,6 +32,6 @@ void buffered_file_ingestor::read_impl(ingestor::read_cb handler)
     handler(payload);
   };
 
-  asio::async_read(m_stream, asio::buffer(m_buffer, m_size), cb);
+  asio::async_read(m_stream, asio::buffer(m_buffer, m_size), read_handler);
 }
 }// namespace rtacc::ingest

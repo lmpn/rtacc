@@ -26,7 +26,10 @@ macro(rtacc_enable_cppcheck WARNINGS_AS_ERRORS CPPCHECK_OPTIONS)
           # ignores code that cppcheck thinks is invalid C++
           --suppress=syntaxError
           --suppress=preprocessorErrorDirective
-          --inconclusive)
+          --inconclusive
+          --suppressions-list=${PROJECT_SOURCE_DIR}/cmake/cppsupp.txt
+          )
+      message(${WARNING_MESSAGE} "cppcheck supa")
     else()
       # if the user provides a CPPCHECK_OPTIONS with a template specified, it will override this template
       set(CMAKE_CXX_CPPCHECK ${CPPCHECK} --template=${CPPCHECK_TEMPLATE} ${CPPCHECK_OPTIONS})

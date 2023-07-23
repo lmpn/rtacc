@@ -35,6 +35,10 @@ int main(int argc, const char **argv)
       return EXIT_SUCCESS;
     }
 
+    if (not file_path.has_value()) {
+      fmt::print("no file\n");
+      return EXIT_SUCCESS;
+    }
 
     constexpr std::size_t size = 128;
     asio::io_context ioc{ 1 };

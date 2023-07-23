@@ -1,5 +1,5 @@
 # [Choice] bionic (18.04), focal (20.04)
-ARG VARIANT="focal"
+ARG VARIANT="jammy"
 FROM ubuntu:${VARIANT}
 
 # Restate the variant to use it later on in the llvm and cmake installations
@@ -41,7 +41,7 @@ RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
 RUN update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100
 RUN update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 100
 
-ARG LLVM_VER="13"
+ARG LLVM_VER="15"
 # Add clang-${LLVM_VER}
 ARG LLVM_URL="http://apt.llvm.org/${VARIANT}/"
 ARG LLVM_PKG="llvm-toolchain-${VARIANT}-${LLVM_VER}"
