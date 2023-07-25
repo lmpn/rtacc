@@ -62,5 +62,6 @@
 			"userUid": "1001",
 			"userGid": "1001"
 		}
-	}
+	},
+	"remoteUser": "codebuster"
 }
