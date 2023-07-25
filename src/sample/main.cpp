@@ -6,6 +6,7 @@
 #include <iostream>
 #include <optional>
 #include <spdlog/spdlog.h>
+#include <thread>
 #include <unordered_set>
 
 
@@ -59,9 +60,9 @@ class node
 private:
   using connection_id = std::size_t;
   std::unordered_set<connection_id> m_connection_ids;
-  std::shared_ptr<manager> m_executor;
 
 protected:
+  std::shared_ptr<manager> m_executor;
   virtual void start(const Message &message) = 0;
   void finish(const Message &message);
 
@@ -118,9 +119,16 @@ bfi_node::bfi_node(std::shared_ptr<manager> manager, std::shared_ptr<rtacc::inge
 void bfi_node::start(const Message &message)
 {
   if (!std::holds_alternative<bfi_msg>(message)) { return; }
-  m_ingestor->read([this](std::string buffer) {
-    Message msg = buffer;
-    finish(msg);
+  m_ingestor->read([this](std::error_code ecode, std::string buffer) {
+    if (!buffer.empty()) {
+      Message msg = buffer;
+      finish(msg);
+    }
+
+    if (ecode.value() != 0) {
+      return;
+    }
+    m_executor->send(0, bfi_msg{});
   });
 }
 
@@ -145,6 +153,8 @@ void count_node::start(const Message &message)
 class log_node : public node
 {
 private:
+  std::size_t ctr{ 0 };
+
 protected:
   void start(const Message &message) override;
 
@@ -156,7 +166,9 @@ log_node::log_node(std::shared_ptr<manager> manager) : node(std::move(manager)) 
 void log_node::start(const Message &message)
 {
   if (!std::holds_alternative<std::size_t>(message)) { return; }
-  spdlog::info("{}", std::get<std::size_t>(message));
+  ctr += std::get<std::size_t>(message);
+  spdlog::info("{}", ctr);
+  finish(nil{});
 }
 
 int main(int argc, const char **argv)

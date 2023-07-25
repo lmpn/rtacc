@@ -13,14 +13,9 @@ buffered_file_ingestor::buffered_file_ingestor(const asio::any_io_executor &ex,
 
 void buffered_file_ingestor::read_impl(ingestor::read_cb handler)
 {
-  auto read_handler = [this, handler = std::move(handler)](std::error_code code, std::size_t length) {
-    if (code.value() != 0) {
-      spdlog::error("Error({}): {} \n", code.value(), code.message());
-      return;
-    }
-    auto payload = m_buffer.substr(0, length);
-    m_buffer.erase(0, length);
-    handler(payload);
+  auto read_handler = [self = shared_from_this(), handler = std::move(handler)](std::error_code code, std::size_t length) {
+    auto payload = self->m_buffer.substr(0, length);
+    handler(code, payload);
   };
 
   asio::async_read(m_stream, asio::buffer(m_buffer, m_size), read_handler);
