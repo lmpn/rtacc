@@ -10,7 +10,6 @@ function(rtacc_setup_dependencies)
   cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
   find_package(Threads REQUIRED)
-
   CPMAddPackage("gh:chriskohlhoff/asio#asio-1-28-0@1.28.0")
 
   # ASIO doesn't use CMake, we have to configure it manually. Extra notes for using on Windows:

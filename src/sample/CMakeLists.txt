@@ -12,8 +12,7 @@ target_link_system_libraries(
           fmt::fmt
           spdlog::spdlog
           rtacc::ingest
-          rtacc::io
-          asio
+          rtacc::processing
 )
 
 target_include_directories(intro PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")

@@ -1,23 +1,27 @@
 #include "buffered_file_ingestor.hpp"
+#include <cstddef>
 #include <fstream>
+#include <ios>
+#include <iostream>
 #include <spdlog/spdlog.h>
+#include <system_error>
 namespace rtacc::ingest {
 
-buffered_file_ingestor::buffered_file_ingestor(const asio::any_io_executor &ex,
-  const std::filesystem::path &path,
-  std::size_t size)
-  : m_file(rtacc::io::file(path)), m_stream(ex, m_file.desc()), m_size{ size }
+buffered_file_ingestor::buffered_file_ingestor(const std::filesystem::path &path, std::streamsize size)
+  : m_size{ size }, m_istream(path, std::ios::binary)
 {
-  m_buffer.resize(m_size);
+  m_buffer.resize(static_cast<std::size_t>(m_size));
 }
 
 void buffered_file_ingestor::read_impl(ingestor::read_cb handler)
 {
-  auto read_handler = [self = shared_from_this(), handler = std::move(handler)](std::error_code code, std::size_t length) {
-    auto payload = self->m_buffer.substr(0, length);
-    handler(code, payload);
-  };
 
-  asio::async_read(m_stream, asio::buffer(m_buffer, m_size), read_handler);
+
+  m_istream.read(m_buffer.data(), m_size);
+  auto bytes = m_istream.gcount();
+  std::size_t real_bytes = 0;
+  if (bytes > 0) { real_bytes = static_cast<std::size_t>(bytes); }
+  auto buffer = m_buffer.substr(0, real_bytes);
+  handler(std::error_code(), buffer);
 }
 }// namespace rtacc::ingest

@@ -1,3 +1,3 @@
 add_subdirectory(sample)
 add_subdirectory(ingest)
-add_subdirectory(io)
+add_subdirectory(processing)

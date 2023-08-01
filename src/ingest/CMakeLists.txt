@@ -1,15 +1,14 @@
 include(GenerateExportHeader)
 
-add_library(ingest buffered_file_ingestor.cpp)
+add_library(ingest buffered_file_ingestor.cpp ingestor_factory.cpp)
 
 add_library(rtacc::ingest ALIAS ingest)
 
-target_link_libraries(ingest PRIVATE rtacc_options rtacc_warnings asio rtacc::io fmt::fmt
-spdlog::spdlog)
+target_link_libraries(ingest PRIVATE rtacc_options rtacc_warnings asio fmt::fmt spdlog::spdlog)
 
 target_include_directories(ingest ${WARNING_GUARD} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>
                                                                   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/>)
-target_include_directories(intro PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/")
+target_include_directories(ingest PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/")
 target_compile_features(ingest PUBLIC cxx_std_20)
 
 set_target_properties(
