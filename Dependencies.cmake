@@ -82,4 +82,9 @@ function(rtacc_setup_dependencies)
     cpmaddpackage("gh:CLIUtils/CLI11@2.3.2")
   endif()
 
+  if(NOT TARGET AudioFile::AudioFile)
+    #using a pound since the @ defaults to vM.M.P
+    cpmaddpackage("gh:adamstark/AudioFile#1.1.0")
+  endif()
+
 endfunction()
