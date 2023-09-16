@@ -3,6 +3,7 @@
 #include "rtacc/processing/definitions.hpp"
 #include "rtacc/processing/executor_factory.hpp"
 #include "rtacc/processing/node.hpp"
+#include <AudioFile.h>
 #include <CLI/CLI.hpp>
 #include <algorithm>
 #include <any>
@@ -153,6 +154,7 @@ int main(int argc, const char **argv)
     manager->send(0, bfi_msg{});
 
     manager->wait();
+    AudioFile<double> audioFile;
   } catch (const std::exception &e) {
     spdlog::error("Unhandled exception in main: {}", e.what());
   }

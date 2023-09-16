@@ -13,6 +13,7 @@ target_link_system_libraries(
           spdlog::spdlog
           rtacc::ingest
           rtacc::processing
+          AudioFile
 )
 
 target_include_directories(intro PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
